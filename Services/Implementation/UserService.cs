@@ -24,7 +24,7 @@ namespace BookStore.Services.Implementation
             _appSettings = appSettings.Value;
         }
 
-        public User Authenticate(string username, string password)
+        public string Login(string username, string password)
         {
             var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
@@ -48,19 +48,18 @@ namespace BookStore.Services.Implementation
             user.Token = tokenHandler.WriteToken(token);
 
             // remove password before returning
-            user.Password = null;
-
-            return user;
+            // Have to save the token into db when login
+            return user.Token;
         }
 
-        public IEnumerable<User> GetAll()
+        public bool Logout(int userDetailsID)
         {
-            // return users without passwords
-            return _users.Select(x =>
-            {
-                x.Password = null;
-                return x;
-            });
+            bool isLoggedOut = false;
+            // Have to delete/mark as invalid when user try to log out in DB
+            var _loggedUserDetails = _users.Where(x => x.Id == userDetailsID).FirstOrDefault();
+            _loggedUserDetails.Token = String.Empty;
+            isLoggedOut = true;
+            return isLoggedOut;
         }
     }
 }

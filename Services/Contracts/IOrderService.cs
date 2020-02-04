@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace BookStore.Services.Contracts
 {
-    public interface IUserService
+    public interface IOrderService
     {
-        string Login(string username, string password);
-        bool Logout(int userDetailsID);
+
+        List<OrderDetails> GetOrders(int userDetailsID);
+        bool SaveOrder(int userDetailsID, OrderDetails orderDetails);
     }
 }

@@ -16,6 +16,7 @@ namespace BookStore.Entities
         public float Price { get; set; }
         public float Discount { get; set; }
         public Category Category { get; set; }
+        public int TotalQuantity { get; }
     }
 
 

@@ -15,7 +15,7 @@ namespace BookStore.Helpers
         };
 
         private static List<Book> _books = new List<Book> {
-            new Book{
+            new Book {
                 Id = 1,
                 Title = "Steve Jobs: The Exclusive Biography",
                 SubTitle = "",
@@ -141,6 +141,79 @@ namespace BookStore.Helpers
         };
 
 
+        private static List<UserOrderDetails> _userOrders = new List<UserOrderDetails>()
+        {
+            new UserOrderDetails {
+                UserDetails = _users[0],
+                OrderDetails = new List<OrderDetails>()
+                        {
+                            new OrderDetails() {
+                                Id = 1,
+                                Items = new List<Item>{
+                                    new Item() { OrderedQuantity = 1, Book = _books[0] },
+                                    new Item() { OrderedQuantity = 2, Book = _books[1] }
+                                },
+                                OrderStatus = Status.Delivered,
+                                OrderedDate = DateTime.UtcNow.AddDays(-20),
+                                DeliveredDate = DateTime.UtcNow.AddDays(-3)
+                            },
+                            new OrderDetails() {
+                                Id = 2,
+                                Items = new List<Item>{ new Item() { OrderedQuantity = 2, Book = _books[2] } },
+                                OrderStatus = Status.Delivered,
+                                OrderedDate = DateTime.UtcNow.AddDays(-20),
+                                DeliveredDate = DateTime.UtcNow.AddDays(-3)
+                            },
+                            new OrderDetails() {
+                                Id = 3,
+                                Items = new List<Item>{
+                                    new Item() { OrderedQuantity = 1, Book = _books[3] },
+                                    new Item() { OrderedQuantity = 1, Book = _books[4] }
+                                },
+                                OrderStatus = Status.Dispatched,
+                                OrderedDate = DateTime.UtcNow.AddDays(-20),
+                                ExpectedDeliveryDate = DateTime.UtcNow.AddDays(-3)
+                            },
+                            new OrderDetails() {
+                                Id = 4,
+                                Items = new List<Item>{
+                                    new Item() { OrderedQuantity = 3, Book = _books[5] },
+                                    new Item() { OrderedQuantity = 2, Book = _books[6] }
+                                },
+                                OrderStatus = Status.Cancelled,
+                                OrderedDate = DateTime.UtcNow.AddDays(-20),
+                                CancelledDate = DateTime.UtcNow.AddDays(-3)
+                            },
+                        }
+            },
+            new UserOrderDetails {
+                UserDetails = _users[1],
+                OrderDetails = new List<OrderDetails>()
+                {
+                    new OrderDetails() {
+                        Id = 5,
+                        Items = new List<Item>{
+                            new Item() { OrderedQuantity = 3, Book = _books[5] },
+                            new Item() { OrderedQuantity = 2, Book = _books[6] }
+                        },
+                        OrderStatus = Status.Delivered,
+                        OrderedDate = DateTime.UtcNow.AddDays(-20),
+                        DeliveredDate = DateTime.UtcNow.AddDays(-3)
+                    },
+                    new OrderDetails() {
+                        Id = 6,
+                        Items = new List<Item>{
+                            new Item() { OrderedQuantity = 5, Book = _books[7] },
+                            new Item() { OrderedQuantity = 3, Book = _books[8] }
+                        },
+                        OrderStatus = Status.Dispatched,
+                        OrderedDate = DateTime.UtcNow.AddDays(-20),
+                        ExpectedDeliveryDate = DateTime.UtcNow.AddDays(-3)
+                    },
+                }
+            }
+        };
+
         public static List<User> GetAllUsers()
         {
             return _users;
@@ -155,5 +228,28 @@ namespace BookStore.Helpers
             return _categories;
         }
 
+        public static List<OrderDetails> GetOrders(int userDetailsID)
+        {
+            List<OrderDetails> userOrderDetails = new List<OrderDetails>();
+            var orderInfo = _userOrders.Where(x => x.UserDetails.Id == userDetailsID).ToList();
+            if (orderInfo != null)
+                userOrderDetails = orderInfo.First().OrderDetails;
+            return userOrderDetails;
+        }
+
+        public static bool SaveOrder(int userDetailsID, OrderDetails orderDetails)
+        {
+            var userDetails = _users.Where(x => x.Id == userDetailsID).FirstOrDefault();
+            orderDetails.OrderedDate = DateTime.UtcNow;
+            orderDetails.OrderStatus = Status.Success;
+            UserOrderDetails userOrderDetails = new UserOrderDetails()
+            {
+                UserDetails = userDetails,
+                // OrderDetails = new List<OrderDetails> { orderDetails }
+                OrderDetails = new List<OrderDetails> { _userOrders[0].OrderDetails[0] }
+            };
+            _userOrders.Add(userOrderDetails);
+            return true;
+        }
     }
 }

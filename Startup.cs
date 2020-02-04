@@ -58,6 +58,7 @@ namespace BookStore
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IOrderService, OrderService>();
 
 
             // In production, the Angular files will be served from this directory
