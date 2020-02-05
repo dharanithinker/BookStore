@@ -8,7 +8,7 @@ namespace BookStore.Services.Contracts
 {
     public interface IUserService
     {
-        string Login(string username, string password);
+        UserInfo Login(string username, string password);
         bool Logout(int userDetailsID);
     }
 }

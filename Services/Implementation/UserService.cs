@@ -24,7 +24,7 @@ namespace BookStore.Services.Implementation
             _appSettings = appSettings.Value;
         }
 
-        public string Login(string username, string password)
+        public UserInfo Login(string username, string password)
         {
             var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
@@ -35,6 +35,11 @@ namespace BookStore.Services.Implementation
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            if (!string.IsNullOrEmpty(user.Token))
+            {
+                // Clear token if saved into DB
+                user.Token = "";
+            }
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -47,9 +52,12 @@ namespace BookStore.Services.Implementation
             var token = tokenHandler.CreateToken(tokenDescriptor);
             user.Token = tokenHandler.WriteToken(token);
 
-            // remove password before returning
             // Have to save the token into db when login
-            return user.Token;
+            UserInfo userAccountDetails = new UserInfo();
+            userAccountDetails.Token = user.Token;
+            userAccountDetails.Expiresin = DateTime.UtcNow.AddDays(7);
+            userAccountDetails.Username = user.Username;
+            return userAccountDetails;
         }
 
         public bool Logout(int userDetailsID)

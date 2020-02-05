@@ -1,0 +1,38 @@
+<table class="table text-center">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Logo</th>
+      <th scope="col">Title</th>
+      <th scope="col">Author</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Discount</th>
+      <th scope="col">After Discount</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let item of cartItems; let i = index">
+    <tr>
+      <th>{{ i + 1 }}</th>
+      <td>
+        <img class="img-logo" src="{{ item.coverPicture }}" />
+      </td>
+      <td>{{ item.title }}</td>
+      <td>{{ item.author }}</td>
+      <td>Rs. {{ item.price }}</td>
+      <td>
+        <input
+          type="number"
+          min="1"
+          max="10"
+          class="item-quantity"
+          [(ngModel)]="item.orderQuantity"
+        />
+      </td>
+      <td>
+        {{ item.discount != "0" ? (item.discount + "%") : "-" }}
+      </td>
+      <td>Rs. {{ ((item.price * item.orderQuantity) - ((item.price * item.orderQuantity) * (item.discount/100))) }}</td>
+    </tr>
+  </tbody>
+</table>

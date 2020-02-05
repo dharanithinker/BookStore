@@ -1,6 +1,15 @@
-<body>
-  <app-nav-menu></app-nav-menu>
-  <div class="container">
+﻿<!-- nav -->
+<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
+    <div class="navbar-nav ml-auto">
+        <a class="nav-item nav-link" routerLink="/Cart" title="View Cart">
+            <i class="fa fa-cart-plus"></i>
+            <span class="badge badge-success" style="position: relative;top:-12px">4</span>
+        </a>
+        <a class="nav-item nav-link text-right" href="" title="Logout" (click)="logout()">Logout</a>
+    </div>
+</nav>
+
+<!-- main app container -->
+<div class="container">
     <router-outlet></router-outlet>
-  </div>
-</body>
+</div>

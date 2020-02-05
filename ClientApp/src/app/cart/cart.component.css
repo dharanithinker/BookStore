@@ -1,0 +1,12 @@
+.table td, .table th{
+    vertical-align: middle !important;
+}
+
+.img-logo{
+    max-height: 100px;
+}
+
+.item-quantity{
+    max-width: 75px;
+    text-align: center;
+}
